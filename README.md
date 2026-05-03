@@ -83,8 +83,35 @@ No login. No account. No backend. Everything stays on your device.
 
 ## 📱 Screenshots
 
-> Add screenshots to a `screenshots/` folder and reference them here, e.g.
-> `![Schedule](screenshots/schedule.png)`
+### Onboarding
+
+| Welcome | Permissions |
+|:---:|:---:|
+| ![Welcome](screenshots/onboarding-welcome.jpg) | ![Permissions](screenshots/onboarding-permissions.jpg) |
+
+### Schedule
+
+| Day view | New event | Event types |
+|:---:|:---:|:---:|
+| ![Schedule](screenshots/schedule-day.jpg) | ![New event](screenshots/new-event.jpg) | ![Event types](screenshots/new-event-types.jpg) |
+
+### Lecturer Directory
+
+| Directory | Lecturer detail | Email chooser |
+|:---:|:---:|:---:|
+| ![Directory](screenshots/lecturer-directory.jpg) | ![Detail](screenshots/lecturer-detail.jpg) | ![Email](screenshots/lecturer-email-chooser.jpg) |
+
+### Departments & Shuttle
+
+| Departments | Shuttle |
+|:---:|:---:|
+| ![Departments](screenshots/departments.jpg) | ![Shuttle](screenshots/shuttle.jpg) |
+
+### Settings
+
+| Sync | Reminders | About |
+|:---:|:---:|:---:|
+| ![Sync](screenshots/settings-sync.jpg) | ![Reminders](screenshots/settings-reminders.jpg) | ![About](screenshots/settings-about.jpg) |
 
 ---
 
@@ -106,24 +133,6 @@ No login. No account. No backend. Everything stays on your device.
 | Java target    | 11 with core-library desugaring (for `java.time` on API 24+) |
 
 No Room, no Hilt, no Retrofit — kept intentionally lean.
-
----
-
-## 🌐 Data sources
-
-| Surface          | Endpoint |
-| ---------------- | -------- |
-| Weekly timetable | `https://s3-ap-southeast-1.amazonaws.com/open-ws/weektimetable` |
-| Exams            | `https://api.apiit.edu.my/examination/{INTAKE}` |
-| Lecturer timetable | `https://api.apiit.edu.my/lecturer-timetable/v2/{sam-account}` |
-| Department hours | `https://api.apiit.edu.my/quix/get/file` (header `X-Filename: quix-customers`) |
-| Shuttle stops    | `https://api.apiit.edu.my/transix-v2/locations` |
-| Shuttle schedule | `https://api.apiit.edu.my/transix-v2/schedule/active` |
-| Staff directory  | `assets/staff-listing.json` (bundled) |
-| Holiday calendar | `assets/holidays.json` (bundled) |
-| Fallback avatar  | `assets/img/no_avatar.png` from APSpace, bundled locally |
-
-All endpoints are public/unauthenticated — APLife reads the same data your APSpace web client does.
 
 ---
 
