@@ -385,28 +385,29 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             _schedule.update { it.copy(isSyncing = true, error = null, message = null) }
             try {
-                var classesAdded = 0; var classesSkipped = 0
-                var examsAdded = 0; var examsSkipped = 0
-                var holidaysAdded = 0; var holidaysSkipped = 0
-                var eventsAdded = 0; var eventsSkipped = 0
+                var classesAdded = 0; var classesUpdated = 0
+                var examsAdded = 0; var examsUpdated = 0
+                var holidaysAdded = 0; var holidaysUpdated = 0
+                var eventsAdded = 0; var eventsUpdated = 0
                 val personal = personalEventRepo.events.value
                 withContext(Dispatchers.IO) {
                     for (id in calendarIds) {
                         val c = calendarSync.syncTimetable(id, classes, classOffsets)
-                        classesAdded += c.inserted; classesSkipped += c.skipped
+                        classesAdded += c.inserted; classesUpdated += c.updated
                         val e = calendarSync.syncExams(id, exams, examOffsets)
-                        examsAdded += e.inserted; examsSkipped += e.skipped
+                        examsAdded += e.inserted; examsUpdated += e.updated
                         val h = calendarSync.syncHolidays(id, holidays)
-                        holidaysAdded += h.inserted; holidaysSkipped += h.skipped
+                        holidaysAdded += h.inserted; holidaysUpdated += h.updated
                         val pe = calendarSync.syncPersonalEvents(id, personal, classOffsets)
-                        eventsAdded += pe.inserted; eventsSkipped += pe.skipped
+                        eventsAdded += pe.inserted; eventsUpdated += pe.updated
                     }
                 }
                 val n = calendarIds.size
                 val msg = buildString {
-                    append("Classes added: $classesAdded (skipped $classesSkipped)")
-                    if (includeExams) append('\n').append("Exams added: $examsAdded (skipped $examsSkipped)")
-                    if (holidays.isNotEmpty()) append('\n').append("Holidays added: $holidaysAdded (skipped $holidaysSkipped)")
+                    append("Classes — added $classesAdded, updated $classesUpdated")
+                    if (includeExams) append('\n').append("Exams — added $examsAdded, updated $examsUpdated")
+                    if (holidays.isNotEmpty()) append('\n').append("Holidays — added $holidaysAdded, updated $holidaysUpdated")
+                    if (personal.isNotEmpty()) append('\n').append("Events — added $eventsAdded, updated $eventsUpdated")
                     if (n > 1) append("\nWritten to $n calendars.")
                 }
                 _schedule.update { it.copy(isSyncing = false, message = msg) }
@@ -635,6 +636,24 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         prefs.onboardingComplete = true
         _schedule.update { it.copy(onboardingComplete = true) }
         if (prefs.autoSyncEnabled) AutoSyncWorker.schedule(getApplication())
+    }
+
+    fun resetOnboarding() {
+        prefs.onboardingComplete = false
+        _schedule.update { it.copy(onboardingComplete = false) }
+    }
+
+    fun removeAllSyncedEvents(onResult: (Int) -> Unit = {}) {
+        val ids = _schedule.value.selectedCalendarIds
+        viewModelScope.launch {
+            val deleted = if (ids.isEmpty()) 0 else withContext(Dispatchers.IO) {
+                calendarSync.deleteAllAplifeEvents(ids)
+            }
+            // Cancel any still-pending APLife notifications too
+            ExamLuckScheduler(getApplication()).rescheduleAll(emptyList())
+            HolidayReminderScheduler(getApplication()).rescheduleAll(emptyList())
+            onResult(deleted)
+        }
     }
 
     fun setIntakeAndLoad(code: String) {
