@@ -1,6 +1,19 @@
-# APLife
+<p align="center">
+  <img src="app/src/main/res/drawable/aplife_logo.png" alt="APLife" width="320">
+</p>
 
-**Your APU timetable, in your phone calendar. Always up to date.**
+<h1 align="center">APLife</h1>
+
+<p align="center"><strong>Your APU timetable, in your phone calendar. Always up to date.</strong></p>
+
+<p align="center">
+  <img alt="Min SDK" src="https://img.shields.io/badge/minSdk-24-3DDC84?style=flat-square">
+  <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-2.3-7F52FF?style=flat-square&logo=kotlin&logoColor=white">
+  <img alt="Compose" src="https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?style=flat-square">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square">
+</p>
+
+---
 
 APLife is an unofficial Android companion for [Asia Pacific University (APU)](https://www.apu.edu.my/) students. It pulls your weekly classes, exams, and APU holidays straight from APU's public endpoints and pushes them into your phone's native calendar — with smart reminders, weekend auto-sync, festive holiday notifications, and an in-app calendar UI that doubles as a personal planner.
 

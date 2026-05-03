@@ -13,7 +13,7 @@ lifecycleViewmodelCompose = "2.10.0"
 desugarJdkLibs = "2.1.5"
 navigationCompose = "2.9.8"
 coil = "2.7.0"
-workManager = "2.10.0"
+workManager = "2.11.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
