@@ -267,8 +267,8 @@ fun ScheduleTab(
                 }
                 item {
                     SectionHeader(
-                        title = formatDate(selectedDate),
-                        subtitle = whenSubtitle(selectedDate, today),
+                        title = dayHeadline(selectedDate, today),
+                        subtitle = daySubtitle(selectedDate, today),
                         leadingIcon = Icons.Default.DateRange,
                         trailing = {
                             DayActionsMenu(
@@ -316,7 +316,7 @@ fun ScheduleTab(
                             EmptyState(
                                 icon = Icons.Default.CheckCircle,
                                 title = "Nothing scheduled",
-                                subtitle = "Looks like a free day. Add a note or event for this date.",
+                                subtitle = "A free day! Tap + Event or + Note above to plan something.",
                             )
                         }
                     }
@@ -948,16 +948,30 @@ private fun ScheduleNoteCard(note: Note, onDelete: () -> Unit) {
     }
 }
 
-private fun whenSubtitle(date: LocalDate, today: LocalDate): String {
+/** Prominent label for the day section — "Today" / "Tomorrow" / weekday name. */
+private fun dayHeadline(date: LocalDate, today: LocalDate): String {
     val diff = java.time.temporal.ChronoUnit.DAYS.between(today, date).toInt()
     return when (diff) {
         0 -> "Today"
         1 -> "Tomorrow"
         -1 -> "Yesterday"
-        in 2..6 -> "In $diff days"
-        in -6..-2 -> "${-diff} days ago"
-        else -> ""
+        else -> date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
     }
+}
+
+/** Supplemental subtitle below the headline — full date + relative phrase if useful. */
+private fun daySubtitle(date: LocalDate, today: LocalDate): String {
+    val pretty = date.format(LONG_DATE_FMT)
+    val diff = java.time.temporal.ChronoUnit.DAYS.between(today, date).toInt()
+    val relative = when (diff) {
+        0, 1, -1 -> null
+        in 2..6 -> "in $diff days"
+        in -6..-2 -> "${-diff} days ago"
+        in 7..30 -> "in ${diff / 7} week${if (diff / 7 == 1) "" else "s"}"
+        in -30..-7 -> "${-diff / 7} week${if (-diff / 7 == 1) "" else "s"} ago"
+        else -> null
+    }
+    return if (relative == null) pretty else "$pretty · $relative"
 }
 
 @Composable

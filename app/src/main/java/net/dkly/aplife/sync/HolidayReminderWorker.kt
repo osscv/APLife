@@ -25,9 +25,13 @@ class HolidayReminderWorker(
         val name = inputData.getString(KEY_NAME).orEmpty().ifBlank { return Result.success() }
         val dateIso = inputData.getString(KEY_DATE_ISO).orEmpty()
         val date = runCatching { LocalDate.parse(dateIso) }.getOrNull() ?: return Result.success()
+        val kind = inputData.getString(KEY_KIND) ?: KIND_EVE
 
-        val (title, body) = holidayEveMessage(name, date)
-        post(title, body, dateIso)
+        val (title, body) = when (kind) {
+            KIND_DAY_OF -> holidayDayOfGreeting(name, date)
+            else -> holidayEveReminder(name, date)
+        }
+        post(title, body, "$dateIso-$kind")
         return Result.success()
     }
 
