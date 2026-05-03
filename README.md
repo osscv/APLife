@@ -158,12 +158,20 @@ You can revoke any of these any time in Android **Settings → Apps → APLife**
 - Kotlin 2.3.x
 
 ### Run it
+
 ```bash
 git clone https://github.com/osscv/APLife.git
 cd APLife
+
+# Production / installable build:
+./gradlew assembleRelease
+
+# Or for day-to-day development (no signing config needed):
 ./gradlew assembleDebug
-# or open the folder in Android Studio and hit Run
+# (or open the folder in Android Studio and hit Run)
 ```
+
+The release APK lands in `app/build/outputs/apk/release/`. You'll need a signing config in `app/build.gradle.kts` (or pass keystore properties via `-P`) for the APK to install on a device — `assembleDebug` works out of the box.
 
 The first launch walks you through onboarding (permissions → intake → groups → calendars → reminders) and writes your first batch of events to the calendar of your choice.
 
