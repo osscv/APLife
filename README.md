@@ -87,31 +87,31 @@ No login. No account. No backend. Everything stays on your device.
 
 | Welcome | Permissions |
 |:---:|:---:|
-| ![Welcome](screenshots/onboarding-welcome.jpg) | ![Permissions](screenshots/onboarding-permissions.jpg) |
+| <img src="screenshots/onboarding-welcome.jpg" alt="Welcome" width="240"> | <img src="screenshots/onboarding-permissions.jpg" alt="Permissions" width="240"> |
 
 ### Schedule
 
 | Day view | New event | Event types |
 |:---:|:---:|:---:|
-| ![Schedule](screenshots/schedule-day.jpg) | ![New event](screenshots/new-event.jpg) | ![Event types](screenshots/new-event-types.jpg) |
+| <img src="screenshots/schedule-day.jpg" alt="Schedule" width="240"> | <img src="screenshots/new-event.jpg" alt="New event" width="240"> | <img src="screenshots/new-event-types.jpg" alt="Event types" width="240"> |
 
 ### Lecturer Directory
 
 | Directory | Lecturer detail | Email chooser |
 |:---:|:---:|:---:|
-| ![Directory](screenshots/lecturer-directory.jpg) | ![Detail](screenshots/lecturer-detail.jpg) | ![Email](screenshots/lecturer-email-chooser.jpg) |
+| <img src="screenshots/lecturer-directory.jpg" alt="Directory" width="240"> | <img src="screenshots/lecturer-detail.jpg" alt="Detail" width="240"> | <img src="screenshots/lecturer-email-chooser.jpg" alt="Email" width="240"> |
 
 ### Departments & Shuttle
 
 | Departments | Shuttle |
 |:---:|:---:|
-| ![Departments](screenshots/departments.jpg) | ![Shuttle](screenshots/shuttle.jpg) |
+| <img src="screenshots/departments.jpg" alt="Departments" width="240"> | <img src="screenshots/shuttle.jpg" alt="Shuttle" width="240"> |
 
 ### Settings
 
 | Sync | Reminders | About |
 |:---:|:---:|:---:|
-| ![Sync](screenshots/settings-sync.jpg) | ![Reminders](screenshots/settings-reminders.jpg) | ![About](screenshots/settings-about.jpg) |
+| <img src="screenshots/settings-sync.jpg" alt="Sync" width="240"> | <img src="screenshots/settings-reminders.jpg" alt="Reminders" width="240"> | <img src="screenshots/settings-about.jpg" alt="About" width="240"> |
 
 ---
 
