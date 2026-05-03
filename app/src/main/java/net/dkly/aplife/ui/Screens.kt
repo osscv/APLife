@@ -75,6 +75,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import net.dkly.aplife.calendar.DeviceCalendar
 import net.dkly.aplife.data.ClassOverride
@@ -2045,213 +2046,157 @@ fun SettingsTab(
 ) {
     var showRemoveConfirm by remember { mutableStateOf(false) }
     var showResetConfirm by remember { mutableStateOf(false) }
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val versionName = remember(ctx) {
+        runCatching {
+            ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName.orEmpty()
+        }.getOrDefault("")
+    }
 
     androidx.compose.foundation.lazy.LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding)
             .padding(horizontal = ScreenHorizontalPadding),
-        verticalArrangement = Arrangement.spacedBy(SectionGap),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         item { Spacer(Modifier.height(4.dp)) }
 
-        // ----- Profile / sync target ---------------------------------------
+        // ===== Timetable =====
+        item { SectionLabel("TIMETABLE") }
         item {
-            SectionHeader(
-                title = "Your timetable",
-                subtitle = "Source data and where it goes",
-                leadingIcon = Icons.Default.AccountCircle,
-            )
-        }
-        item {
-            BrandCard(onClick = onChangeIntake) {
+            SettingsCard {
                 SettingsRow(
                     icon = Icons.Default.Search,
                     title = "Intake",
                     value = inputs.intakeCode.ifBlank { "Not set" },
-                    subtitle = "Tap to change intake or groups",
+                    onClick = onChangeIntake,
+                    showChevron = true,
                 )
-            }
-        }
-        item {
-            BrandCard {
+                SettingsDivider()
                 SettingsRow(
                     icon = Icons.Default.Star,
                     title = "Groups",
                     value = inputs.groupsLabel,
-                    subtitle = "Edit via the Intake card above",
+                    onClick = onChangeIntake,
+                    showChevron = true,
                 )
-            }
-        }
-        item {
-            BrandCard(onClick = onChangeCalendars) {
+                SettingsDivider()
                 SettingsRow(
                     icon = Icons.Default.DateRange,
                     title = "Calendars",
                     value = inputs.calendarsLabel,
-                    subtitle = "Tap to pick which device calendars receive events",
+                    onClick = onChangeCalendars,
+                    showChevron = true,
                 )
             }
         }
 
-        // ----- Sync ---------------------------------------------------------
+        // ===== Sync =====
+        item { SectionLabel("SYNC") }
         item {
-            SectionHeader(
-                title = "Sync",
-                subtitle = "Keep your phone calendar fresh",
-                leadingIcon = Icons.Default.Refresh,
-            )
-        }
-        item {
-            BrandCard {
-                Column {
-                    SwitchRow(
-                        title = "Weekend auto-sync",
-                        subtitle = "Pull next week's classes every Sat/Sun automatically",
-                        checked = inputs.autoSyncEnabled,
-                        onCheckedChange = onAutoSyncChange,
-                    )
-                    androidx.compose.material3.HorizontalDivider(
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
-                        modifier = Modifier.padding(vertical = 8.dp),
-                    )
-                    SwitchRow(
-                        title = "Sync APU holidays",
-                        subtitle = "Add APU's official holiday calendar",
-                        checked = state.syncHolidays,
-                        onCheckedChange = onSyncHolidaysChange,
-                    )
-                }
-            }
-        }
-        item {
-            BrandCard(onClick = onSyncNow) {
+            SettingsCard {
+                SettingsToggleRow(
+                    icon = Icons.Default.Refresh,
+                    title = "Weekend auto-sync",
+                    subtitle = "Pull next week's classes every Sat/Sun",
+                    checked = inputs.autoSyncEnabled,
+                    onCheckedChange = onAutoSyncChange,
+                )
+                SettingsDivider()
+                SettingsToggleRow(
+                    icon = Icons.Default.Star,
+                    title = "Sync APU holidays",
+                    subtitle = "Include the official APU holiday calendar",
+                    checked = state.syncHolidays,
+                    onCheckedChange = onSyncHolidaysChange,
+                )
+                SettingsDivider()
                 SettingsRow(
                     icon = Icons.Default.CheckCircle,
                     title = "Sync now",
-                    value = "Push the latest classes, exams and holidays",
-                    subtitle = if (inputs.lastSyncMs > 0) "Last synced: ${formatEpoch(inputs.lastSyncMs)}" else "Never synced yet",
+                    value = if (inputs.lastSyncMs > 0)
+                        "Last synced ${formatEpoch(inputs.lastSyncMs)}"
+                    else "Tap to push the latest classes, exams and holidays",
+                    onClick = onSyncNow,
+                    showChevron = false,
                 )
             }
         }
 
-        // ----- Reminders ----------------------------------------------------
+        // ===== Reminders =====
+        item { SectionLabel("REMINDERS") }
         item {
-            SectionHeader(
-                title = "Reminders",
-                subtitle = "Alerts attached when events are written",
-                leadingIcon = Icons.Default.Notifications,
-            )
-        }
-        item {
-            BrandCard {
-                Column {
-                    Text("Classes", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                    Text(
-                        "Pick offsets before class start",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    ReminderChips(state.classReminderMinutes, onClassReminders)
-                }
-            }
-        }
-        item {
-            BrandCard {
-                Column {
-                    Text("Exams", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                    Text(
-                        "A longer ramp helps you prepare. The very last reminder triggers a personalised \"Good luck\" notification 5 min before each exam.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    ReminderChips(state.examReminderMinutes, onExamReminders)
-                }
+            SettingsCard {
+                ReminderBlock(
+                    title = "Classes",
+                    subtitle = "Offsets before each class start",
+                    selected = state.classReminderMinutes,
+                    onChange = onClassReminders,
+                )
+                SettingsDivider()
+                ReminderBlock(
+                    title = "Exams",
+                    subtitle = "The closest reminder triggers a personalised \"Good luck\" notification 5 min before each exam",
+                    selected = state.examReminderMinutes,
+                    onChange = onExamReminders,
+                )
             }
         }
 
-        // ----- Danger zone --------------------------------------------------
+        // ===== Danger zone =====
+        item { SectionLabel("DANGER ZONE", color = MaterialTheme.colorScheme.error) }
         item {
-            SectionHeader(
-                title = "Danger zone",
-                subtitle = "Irreversible actions",
-                leadingIcon = Icons.Default.Info,
-            )
-        }
-        item {
-            BrandCard(onClick = { showRemoveConfirm = true }) {
+            SettingsCard {
                 SettingsRow(
                     icon = Icons.Default.Close,
                     title = "Remove all APLife events",
-                    value = "Wipe APLife events from your selected calendars",
-                    subtitle = "Your own calendar entries are not affected",
+                    value = "Wipe APLife events from your calendars",
+                    onClick = { showRemoveConfirm = true },
+                    showChevron = true,
                     tint = MaterialTheme.colorScheme.error,
                 )
-            }
-        }
-        item {
-            BrandCard(onClick = { showResetConfirm = true }) {
+                SettingsDivider()
                 SettingsRow(
                     icon = Icons.Default.Refresh,
                     title = "Reset setup",
                     value = "Re-run the onboarding wizard",
-                    subtitle = "Pick a different intake, groups, calendars or reminders",
+                    onClick = { showResetConfirm = true },
+                    showChevron = true,
                     tint = MaterialTheme.colorScheme.error,
                 )
             }
         }
 
-        // ----- About --------------------------------------------------------
+        // ===== About =====
+        item { SectionLabel("ABOUT") }
         item {
-            SectionHeader(
-                title = "About",
-                subtitle = "What's under the hood",
-                leadingIcon = Icons.Default.Info,
-            )
-        }
-        item {
-            BrandCard {
-                val ctx = androidx.compose.ui.platform.LocalContext.current
-                val versionName = remember(ctx) {
-                    runCatching {
-                        val pi = ctx.packageManager.getPackageInfo(ctx.packageName, 0)
-                        pi.versionName.orEmpty()
-                    }.getOrDefault("")
-                }
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    MetaRow("App", "APLife")
-                    MetaRow("Version", versionName.ifBlank { "—" })
-                    MetaRow("Source", "APU public timetable + holidays + transix + quix endpoints")
-                    MetaRow("Storage", "Local — your timetable preferences and notes never leave the device")
-                }
-            }
-        }
-        item {
-            val ctx = androidx.compose.ui.platform.LocalContext.current
-            BrandCard(onClick = { openUrlSafely(ctx, GITHUB_REPO_URL) }) {
-                LinkRow(
+            SettingsCard {
+                MetaListRow("App", "APLife")
+                SettingsDivider()
+                MetaListRow("Version", versionName.ifBlank { "—" })
+                SettingsDivider()
+                MetaListRow("Storage", "On-device only")
+                SettingsDivider()
+                SettingsRow(
                     icon = Icons.Default.Info,
-                    title = "GitHub repository",
-                    primary = GITHUB_REPO_URL,
-                    subtitle = "Tap to open · view source, file issues or contribute",
+                    title = "GitHub",
+                    value = "osscv/APLife",
+                    onClick = { openUrlSafely(ctx, GITHUB_REPO_URL) },
+                    showChevron = true,
                 )
-            }
-        }
-        item {
-            val ctx = androidx.compose.ui.platform.LocalContext.current
-            BrandCard(onClick = { openUrlSafely(ctx, AUTHOR_WEBSITE) }) {
-                LinkRow(
+                SettingsDivider()
+                SettingsRow(
                     icon = Icons.Default.AccountCircle,
                     title = "Author",
-                    primary = AUTHOR_NAME,
-                    subtitle = "$AUTHOR_WEBSITE · tap to open",
+                    value = AUTHOR_NAME,
+                    onClick = { openUrlSafely(ctx, AUTHOR_WEBSITE) },
+                    showChevron = true,
                 )
             }
         }
 
-        item { Spacer(Modifier.height(32.dp)) }
+        item { Spacer(Modifier.height(40.dp)) }
     }
 
     if (showRemoveConfirm) {
@@ -2300,70 +2245,165 @@ fun SettingsTab(
 }
 
 @Composable
+private fun SectionLabel(
+    text: String,
+    color: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurfaceVariant,
+) {
+    Text(
+        text,
+        style = MaterialTheme.typography.labelSmall,
+        color = color,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 1.sp,
+        modifier = Modifier.padding(start = 14.dp, top = 14.dp, bottom = 6.dp),
+    )
+}
+
+@Composable
+private fun SettingsCard(content: @Composable () -> Unit) {
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
+        shape = RoundedCornerShape(16.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column { content() }
+    }
+}
+
+@Composable
+private fun SettingsDivider() {
+    androidx.compose.material3.HorizontalDivider(
+        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+        modifier = Modifier.padding(start = 56.dp),
+    )
+}
+
+@Composable
 private fun SettingsRow(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     title: String,
     value: String,
-    subtitle: String? = null,
+    onClick: (() -> Unit)? = null,
+    showChevron: Boolean = false,
     tint: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    val rowMod = Modifier
+        .fillMaxWidth()
+        .let { if (onClick != null) it.clickable(onClick = onClick) else it }
+        .padding(horizontal = 14.dp, vertical = 12.dp)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = rowMod,
+    ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .size(28.dp)
+                .clip(RoundedCornerShape(8.dp))
                 .background(tint.copy(alpha = 0.12f)),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(20.dp))
+            Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))
         }
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(
                 title,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold,
                 color = if (tint == MaterialTheme.colorScheme.error) tint else MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 value,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
             )
-            if (!subtitle.isNullOrBlank()) {
-                Text(
-                    subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+        }
+        if (showChevron && onClick != null) {
+            Spacer(Modifier.width(8.dp))
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                modifier = Modifier.size(16.dp),
+            )
         }
     }
 }
 
 @Composable
-private fun LinkRow(
+private fun SettingsToggleRow(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     title: String,
-    primary: String,
     subtitle: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onCheckedChange(!checked) }
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+    ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .size(28.dp)
+                .clip(RoundedCornerShape(8.dp))
                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
         }
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-            Text(primary, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
-            Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
+        Spacer(Modifier.width(8.dp))
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
+    }
+}
+
+@Composable
+private fun ReminderBlock(
+    title: String,
+    subtitle: String,
+    selected: List<Int>,
+    onChange: (List<Int>) -> Unit,
+) {
+    Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
+        Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+        Text(
+            subtitle,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.height(8.dp))
+        ReminderChips(selected, onChange)
+    }
+}
+
+@Composable
+private fun MetaListRow(label: String, value: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+    ) {
+        Text(
+            label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.width(96.dp),
+        )
+        Text(value, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
     }
 }
 
@@ -2372,27 +2412,6 @@ private fun openUrlSafely(context: android.content.Context, url: String) {
         context.startActivity(
             android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url)),
         )
-    }
-}
-
-@Composable
-private fun SwitchRow(
-    title: String,
-    subtitle: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-            Text(
-                subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-        Spacer(Modifier.width(12.dp))
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 
