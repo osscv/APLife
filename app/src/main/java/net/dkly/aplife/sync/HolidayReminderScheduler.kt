@@ -66,8 +66,8 @@ class HolidayReminderScheduler(private val context: Context) {
  * Short, casual eve reminder — fires the night before the holiday.
  */
 internal fun holidayEveReminder(holidayName: String, @Suppress("UNUSED_PARAMETER") date: LocalDate): Pair<String, String> {
-    return "No class tomorrow!" to
-        "Hahah, tomorrow is $holidayName — enjoy your day off!"
+    return "No class tomorrow! 🥳" to
+        "Hahah, tomorrow is $holidayName — enjoy your day off! 🎉"
 }
 
 /**
@@ -80,55 +80,55 @@ internal fun holidayDayOfGreeting(holidayName: String, date: LocalDate): Pair<St
 
     return when {
         "chinese new year" in n || "lunar" in n || n.contains("cny") ->
-            "Gōngxǐ fācái!" to
-                "Today is $holidayName. Time to see family, eat tangerines and enjoy the day off. Have a prosperous one!"
+            "Gōngxǐ fācái! 🧧" to
+                "Today is $holidayName. Time to see family, eat tangerines and enjoy the day off. Have a prosperous one! 🐉🏮"
         "hari raya aidilfitri" in n || "aidilfitri" in n || ("hari raya" in n && "haji" !in n) ->
-            "Selamat Hari Raya!" to
-                "Today is $holidayName. Maaf zahir dan batin — enjoy the open houses, ketupat and rendang!"
+            "Selamat Hari Raya! 🌙" to
+                "Today is $holidayName. Maaf zahir dan batin — enjoy the open houses, ketupat and rendang! 🕌"
         "aidiladha" in n || "haji" in n ->
-            "Selamat Hari Raya Aidiladha!" to
+            "Selamat Hari Raya Aidiladha! 🕌" to
                 "Today is $holidayName. Wishing you a blessed celebration with family and friends."
         "christmas" in n || "xmas" in n ->
-            "Merry Christmas!" to
-                "Today is $holidayName. Wishing you a warm, joyful day with the people you love."
+            "Merry Christmas! 🎄" to
+                "Today is $holidayName. Wishing you a warm, joyful day with the people you love. 🎁"
         "deepavali" in n || "diwali" in n ->
-            "Happy Deepavali!" to
-                "Today is $holidayName — the festival of lights. May it brighten your year ahead."
+            "Happy Deepavali! 🪔" to
+                "Today is $holidayName — the festival of lights. May it brighten your year ahead. ✨"
         "wesak" in n || "vesak" in n ->
-            "Happy Wesak Day!" to
+            "Happy Wesak Day! 🪷" to
                 "Today is $holidayName. Wishing you a day of peace and reflection."
         "thaipusam" in n ->
-            "Happy Thaipusam!" to
+            "Happy Thaipusam! 🪷" to
                 "Today is $holidayName. Have a blessed and meaningful day."
         "national day" in n || "kebangsaan" in n || "merdeka" in n || isAug31 ->
-            "Selamat Hari Kebangsaan!" to
+            "Selamat Hari Kebangsaan! 🇲🇾" to
                 "Today is Malaysia's National Day. Sambutlah hari kemerdekaan — wear your colours proud!"
         "malaysia day" in n || "hari malaysia" in n || isSep16 ->
-            "Selamat Hari Malaysia!" to
+            "Selamat Hari Malaysia! 🇲🇾" to
                 "Today we celebrate the formation of Malaysia. One nation, many cultures."
         "labour" in n || "labor" in n || "may day" in n ->
-            "Happy Labour Day!" to
+            "Happy Labour Day! 💼" to
                 "Today is $holidayName. Take the day off, you've earned it."
         "good friday" in n ->
-            "Good Friday" to
+            "Good Friday 🕊️" to
                 "Wishing you a peaceful, reflective day off."
         "new year" in n && "chinese" !in n && "lunar" !in n && "hijri" !in n && "muharram" !in n ->
-            "Happy New Year!" to
-                "Today is $holidayName — here's to a fresh start!"
+            "Happy New Year! 🎉" to
+                "Today is $holidayName — here's to a fresh start! 🎆"
         "awal muharram" in n || "maal hijrah" in n || "hijri" in n ->
-            "Selamat Tahun Baru Hijrah!" to
+            "Selamat Tahun Baru Hijrah! 🌙" to
                 "Today is $holidayName. Wishing you a blessed new year."
         "prophet" in n || "mawlid" in n || "maulidur rasul" in n ->
-            "Maulidur Rasul" to
+            "Maulidur Rasul 🕌" to
                 "Today is $holidayName. May it bring blessings and peace."
         "agong" in n || "yang di-pertuan agong" in n ->
-            "Agong's birthday" to
+            "Agong's birthday 👑" to
                 "$holidayName today — daulat tuanku and enjoy the public holiday!"
         "sultan" in n ->
-            "Sultan's birthday" to
+            "Sultan's birthday 👑" to
                 "$holidayName — daulat tuanku and have a wonderful day off."
         else ->
-            "Happy holiday!" to
+            "Happy holiday! 🎉" to
                 "Today is $holidayName. Enjoy your day off!"
     }
 }

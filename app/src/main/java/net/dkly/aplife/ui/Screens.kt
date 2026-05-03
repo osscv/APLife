@@ -1419,7 +1419,6 @@ private fun AvatarOrPlaceholder(
     fallback: String,
     onClick: (() -> Unit)? = null,
 ) {
-    val initial = fallback.trim().firstOrNull()?.uppercaseChar()?.toString() ?: "?"
     val base = Modifier
         .size(44.dp)
         .clip(CircleShape)
@@ -1434,10 +1433,17 @@ private fun AvatarOrPlaceholder(
                 model = photo,
                 contentDescription = null,
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                error = androidx.compose.ui.res.painterResource(net.dkly.aplife.R.drawable.no_avatar),
+                fallback = androidx.compose.ui.res.painterResource(net.dkly.aplife.R.drawable.no_avatar),
                 modifier = Modifier.fillMaxSize().clip(CircleShape),
             )
         } else {
-            Text(initial, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
+            androidx.compose.foundation.Image(
+                painter = androidx.compose.ui.res.painterResource(net.dkly.aplife.R.drawable.no_avatar),
+                contentDescription = null,
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                modifier = Modifier.fillMaxSize().clip(CircleShape),
+            )
         }
     }
 }
@@ -1620,6 +1626,8 @@ private fun LecturerPhotoDialog(
                     model = photo,
                     contentDescription = name,
                     contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                    error = androidx.compose.ui.res.painterResource(net.dkly.aplife.R.drawable.no_avatar),
+                    fallback = androidx.compose.ui.res.painterResource(net.dkly.aplife.R.drawable.no_avatar),
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f),

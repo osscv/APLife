@@ -72,5 +72,8 @@ class HolidayReminderWorker(
     companion object {
         const val KEY_NAME = "holiday_name"
         const val KEY_DATE_ISO = "holiday_date_iso"
+        const val KEY_KIND = "holiday_kind"
+        const val KIND_EVE = "eve"
+        const val KIND_DAY_OF = "day_of"
     }
 }
