@@ -60,10 +60,12 @@ import net.dkly.aplife.notes.Note
 import net.dkly.aplife.data.PersonalEvent
 import net.dkly.aplife.ui.AddNoteDialog
 import net.dkly.aplife.ui.AppViewModel
+import net.dkly.aplife.ui.ChangeCalendarsDialog
 import net.dkly.aplife.ui.ChangeIntakeDialog
 import net.dkly.aplife.ui.DepartmentsTab
 import net.dkly.aplife.ui.EditClassDialog
 import net.dkly.aplife.ui.PersonalEventDialog
+import net.dkly.aplife.ui.SettingsScreenInputs
 import net.dkly.aplife.ui.LecturerInfoDialog
 import net.dkly.aplife.ui.LecturersTab
 import net.dkly.aplife.ui.NotesTab
@@ -121,6 +123,7 @@ private fun AppRoot() {
     var pendingNoteFromButton by remember { mutableStateOf(false) }
     var pendingLecturerLookup by remember { mutableStateOf<TimetableEntry?>(null) }
     var showChangeIntake by remember { mutableStateOf(false) }
+    var showChangeCalendars by remember { mutableStateOf(false) }
     var pendingEditClass by remember { mutableStateOf<TimetableEntry?>(null) }
     var pendingEventEdit by remember { mutableStateOf<Pair<PersonalEvent?, java.time.LocalDate>?>(null) }
 
@@ -291,13 +294,50 @@ private fun AppRoot() {
                         contentPadding = padding,
                     )
                 }
-                Tab.Settings -> SettingsTab(
-                    state = settings,
-                    onClassReminders = viewModel::setClassReminders,
-                    onExamReminders = viewModel::setExamReminders,
-                    onSyncHolidaysChange = viewModel::setSyncHolidays,
-                    contentPadding = padding,
-                )
+                Tab.Settings -> {
+                    LaunchedEffect(Unit) {
+                        if (schedule.calendars.isEmpty() && hasCalendarPermission) viewModel.loadCalendars()
+                    }
+                    val groupsLabel = if (schedule.selectedGroups.isEmpty()) "All groups"
+                    else schedule.selectedGroups.sorted().joinToString(", ")
+                    val calendarsLabel = if (schedule.selectedCalendarIds.isEmpty()) "None selected"
+                    else {
+                        val names = schedule.calendars
+                            .filter { it.id in schedule.selectedCalendarIds }
+                            .map { it.displayName.ifBlank { it.accountName } }
+                        if (names.isEmpty()) "${schedule.selectedCalendarIds.size} selected"
+                        else names.joinToString(", ")
+                    }
+                    SettingsTab(
+                        state = settings,
+                        inputs = SettingsScreenInputs(
+                            intakeCode = schedule.intakeCode,
+                            groupsLabel = groupsLabel,
+                            calendarsLabel = calendarsLabel,
+                            lastSyncMs = 0L,
+                            autoSyncEnabled = schedule.autoSyncEnabled,
+                        ),
+                        onClassReminders = viewModel::setClassReminders,
+                        onExamReminders = viewModel::setExamReminders,
+                        onSyncHolidaysChange = viewModel::setSyncHolidays,
+                        onAutoSyncChange = viewModel::setAutoSyncEnabled,
+                        onSyncNow = { viewModel.syncToCalendar(includeExams = true) },
+                        onChangeIntake = { showChangeIntake = true },
+                        onChangeCalendars = { showChangeCalendars = true },
+                        onResetOnboarding = { viewModel.resetOnboarding() },
+                        onRemoveAllSynced = {
+                            viewModel.removeAllSyncedEvents { count ->
+                                scope.launch {
+                                    snackbarState.showSnackbar(
+                                        if (count > 0) "Removed $count APLife event${if (count == 1) "" else "s"} from your calendar(s)."
+                                        else "No APLife events were found on your calendar(s).",
+                                    )
+                                }
+                            }
+                        },
+                        contentPadding = padding,
+                    )
+                }
             }
         }
     }
@@ -375,6 +415,15 @@ private fun AppRoot() {
                 scope.launch { snackbarState.showSnackbar("Reverted to APU's version.") }
             },
             onDismiss = { pendingEditClass = null },
+        )
+    }
+
+    if (showChangeCalendars) {
+        ChangeCalendarsDialog(
+            calendars = schedule.calendars,
+            selectedIds = schedule.selectedCalendarIds,
+            onToggle = viewModel::toggleCalendar,
+            onDismiss = { showChangeCalendars = false },
         )
     }
 

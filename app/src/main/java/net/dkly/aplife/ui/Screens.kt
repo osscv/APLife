@@ -23,6 +23,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -41,6 +43,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
@@ -2013,64 +2016,383 @@ private fun LocationRow(loc: TransportLocation) {
 
 // ===== SETTINGS TAB =====================================================
 
+data class SettingsScreenInputs(
+    val intakeCode: String,
+    val groupsLabel: String,
+    val calendarsLabel: String,
+    val lastSyncMs: Long,
+    val autoSyncEnabled: Boolean,
+)
+
+private const val GITHUB_REPO_URL = "https://github.com/osscv/APLife"
+private const val AUTHOR_NAME = "Lay Yang (DKLY)"
+private const val AUTHOR_WEBSITE = "https://www.dkly.net"
+
 @Composable
 fun SettingsTab(
     state: SettingsState,
+    inputs: SettingsScreenInputs,
     onClassReminders: (List<Int>) -> Unit,
     onExamReminders: (List<Int>) -> Unit,
     onSyncHolidaysChange: (Boolean) -> Unit,
+    onAutoSyncChange: (Boolean) -> Unit,
+    onSyncNow: () -> Unit,
+    onChangeIntake: () -> Unit,
+    onChangeCalendars: () -> Unit,
+    onResetOnboarding: () -> Unit,
+    onRemoveAllSynced: () -> Unit,
     contentPadding: PaddingValues,
 ) {
-    Column(
+    var showRemoveConfirm by remember { mutableStateOf(false) }
+    var showResetConfirm by remember { mutableStateOf(false) }
+
+    androidx.compose.foundation.lazy.LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(contentPadding)
             .padding(horizontal = ScreenHorizontalPadding),
         verticalArrangement = Arrangement.spacedBy(SectionGap),
     ) {
-        Spacer(Modifier.height(4.dp))
-        SectionHeader(
-            title = "Settings",
-            subtitle = "Reminders and sync preferences",
-            leadingIcon = Icons.Default.Edit,
-        )
-        BrandCard {
-            Column {
-                Text("Class reminders", style = MaterialTheme.typography.titleSmall)
-                Text(
-                    "Offsets before each class start",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+        item { Spacer(Modifier.height(4.dp)) }
+
+        // ----- Profile / sync target ---------------------------------------
+        item {
+            SectionHeader(
+                title = "Your timetable",
+                subtitle = "Source data and where it goes",
+                leadingIcon = Icons.Default.AccountCircle,
+            )
+        }
+        item {
+            BrandCard(onClick = onChangeIntake) {
+                SettingsRow(
+                    icon = Icons.Default.Search,
+                    title = "Intake",
+                    value = inputs.intakeCode.ifBlank { "Not set" },
+                    subtitle = "Tap to change intake or groups",
                 )
-                Spacer(Modifier.height(8.dp))
-                ReminderChips(state.classReminderMinutes, onClassReminders)
             }
         }
-        BrandCard {
-            Column {
-                Text("Exam reminders", style = MaterialTheme.typography.titleSmall)
-                Text(
-                    "Offsets before each exam start",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+        item {
+            BrandCard {
+                SettingsRow(
+                    icon = Icons.Default.Star,
+                    title = "Groups",
+                    value = inputs.groupsLabel,
+                    subtitle = "Edit via the Intake card above",
                 )
-                Spacer(Modifier.height(8.dp))
-                ReminderChips(state.examReminderMinutes, onExamReminders)
             }
         }
-        BrandCard {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) {
-                    Text("Sync APU holidays", style = MaterialTheme.typography.titleSmall)
+        item {
+            BrandCard(onClick = onChangeCalendars) {
+                SettingsRow(
+                    icon = Icons.Default.DateRange,
+                    title = "Calendars",
+                    value = inputs.calendarsLabel,
+                    subtitle = "Tap to pick which device calendars receive events",
+                )
+            }
+        }
+
+        // ----- Sync ---------------------------------------------------------
+        item {
+            SectionHeader(
+                title = "Sync",
+                subtitle = "Keep your phone calendar fresh",
+                leadingIcon = Icons.Default.Refresh,
+            )
+        }
+        item {
+            BrandCard {
+                Column {
+                    SwitchRow(
+                        title = "Weekend auto-sync",
+                        subtitle = "Pull next week's classes every Sat/Sun automatically",
+                        checked = inputs.autoSyncEnabled,
+                        onCheckedChange = onAutoSyncChange,
+                    )
+                    androidx.compose.material3.HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f),
+                        modifier = Modifier.padding(vertical = 8.dp),
+                    )
+                    SwitchRow(
+                        title = "Sync APU holidays",
+                        subtitle = "Add APU's official holiday calendar",
+                        checked = state.syncHolidays,
+                        onCheckedChange = onSyncHolidaysChange,
+                    )
+                }
+            }
+        }
+        item {
+            BrandCard(onClick = onSyncNow) {
+                SettingsRow(
+                    icon = Icons.Default.CheckCircle,
+                    title = "Sync now",
+                    value = "Push the latest classes, exams and holidays",
+                    subtitle = if (inputs.lastSyncMs > 0) "Last synced: ${formatEpoch(inputs.lastSyncMs)}" else "Never synced yet",
+                )
+            }
+        }
+
+        // ----- Reminders ----------------------------------------------------
+        item {
+            SectionHeader(
+                title = "Reminders",
+                subtitle = "Alerts attached when events are written",
+                leadingIcon = Icons.Default.Notifications,
+            )
+        }
+        item {
+            BrandCard {
+                Column {
+                    Text("Classes", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     Text(
-                        "Add APU's official holiday calendar to your device calendar",
+                        "Pick offsets before class start",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
+                    Spacer(Modifier.height(8.dp))
+                    ReminderChips(state.classReminderMinutes, onClassReminders)
                 }
-                Switch(checked = state.syncHolidays, onCheckedChange = onSyncHolidaysChange)
             }
         }
+        item {
+            BrandCard {
+                Column {
+                    Text("Exams", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        "A longer ramp helps you prepare. The very last reminder triggers a personalised \"Good luck\" notification 5 min before each exam.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    ReminderChips(state.examReminderMinutes, onExamReminders)
+                }
+            }
+        }
+
+        // ----- Danger zone --------------------------------------------------
+        item {
+            SectionHeader(
+                title = "Danger zone",
+                subtitle = "Irreversible actions",
+                leadingIcon = Icons.Default.Info,
+            )
+        }
+        item {
+            BrandCard(onClick = { showRemoveConfirm = true }) {
+                SettingsRow(
+                    icon = Icons.Default.Close,
+                    title = "Remove all APLife events",
+                    value = "Wipe APLife events from your selected calendars",
+                    subtitle = "Your own calendar entries are not affected",
+                    tint = MaterialTheme.colorScheme.error,
+                )
+            }
+        }
+        item {
+            BrandCard(onClick = { showResetConfirm = true }) {
+                SettingsRow(
+                    icon = Icons.Default.Refresh,
+                    title = "Reset setup",
+                    value = "Re-run the onboarding wizard",
+                    subtitle = "Pick a different intake, groups, calendars or reminders",
+                    tint = MaterialTheme.colorScheme.error,
+                )
+            }
+        }
+
+        // ----- About --------------------------------------------------------
+        item {
+            SectionHeader(
+                title = "About",
+                subtitle = "What's under the hood",
+                leadingIcon = Icons.Default.Info,
+            )
+        }
+        item {
+            BrandCard {
+                val ctx = androidx.compose.ui.platform.LocalContext.current
+                val versionName = remember(ctx) {
+                    runCatching {
+                        val pi = ctx.packageManager.getPackageInfo(ctx.packageName, 0)
+                        pi.versionName.orEmpty()
+                    }.getOrDefault("")
+                }
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    MetaRow("App", "APLife")
+                    MetaRow("Version", versionName.ifBlank { "—" })
+                    MetaRow("Source", "APU public timetable + holidays + transix + quix endpoints")
+                    MetaRow("Storage", "Local — your timetable preferences and notes never leave the device")
+                }
+            }
+        }
+        item {
+            val ctx = androidx.compose.ui.platform.LocalContext.current
+            BrandCard(onClick = { openUrlSafely(ctx, GITHUB_REPO_URL) }) {
+                LinkRow(
+                    icon = Icons.Default.Info,
+                    title = "GitHub repository",
+                    primary = GITHUB_REPO_URL,
+                    subtitle = "Tap to open · view source, file issues or contribute",
+                )
+            }
+        }
+        item {
+            val ctx = androidx.compose.ui.platform.LocalContext.current
+            BrandCard(onClick = { openUrlSafely(ctx, AUTHOR_WEBSITE) }) {
+                LinkRow(
+                    icon = Icons.Default.AccountCircle,
+                    title = "Author",
+                    primary = AUTHOR_NAME,
+                    subtitle = "$AUTHOR_WEBSITE · tap to open",
+                )
+            }
+        }
+
+        item { Spacer(Modifier.height(32.dp)) }
+    }
+
+    if (showRemoveConfirm) {
+        AlertDialog(
+            onDismissRequest = { showRemoveConfirm = false },
+            title = { Text("Remove all APLife events?") },
+            text = {
+                Text(
+                    "This permanently deletes every event APLife wrote to your selected calendar(s). " +
+                        "Your own calendar entries are not affected.",
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showRemoveConfirm = false
+                    onRemoveAllSynced()
+                }) { Text("Remove", color = MaterialTheme.colorScheme.error) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showRemoveConfirm = false }) { Text("Cancel") }
+            },
+        )
+    }
+
+    if (showResetConfirm) {
+        AlertDialog(
+            onDismissRequest = { showResetConfirm = false },
+            title = { Text("Reset onboarding?") },
+            text = {
+                Text(
+                    "You'll be taken back to the welcome screen to pick intake, groups, calendars and reminders again. " +
+                        "Your synced calendar events stay where they are.",
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showResetConfirm = false
+                    onResetOnboarding()
+                }) { Text("Reset") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showResetConfirm = false }) { Text("Cancel") }
+            },
+        )
+    }
+}
+
+@Composable
+private fun SettingsRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    title: String,
+    value: String,
+    subtitle: String? = null,
+    tint: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(tint.copy(alpha = 0.12f)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(20.dp))
+        }
+        Spacer(Modifier.width(12.dp))
+        Column(Modifier.weight(1f)) {
+            Text(
+                title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = if (tint == MaterialTheme.colorScheme.error) tint else MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                value,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            if (!subtitle.isNullOrBlank()) {
+                Text(
+                    subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LinkRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    title: String,
+    primary: String,
+    subtitle: String,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+        }
+        Spacer(Modifier.width(12.dp))
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+            Text(primary, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
+            Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+private fun openUrlSafely(context: android.content.Context, url: String) {
+    runCatching {
+        context.startActivity(
+            android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url)),
+        )
+    }
+}
+
+@Composable
+private fun SwitchRow(
+    title: String,
+    subtitle: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(Modifier.width(12.dp))
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 
@@ -2860,6 +3182,71 @@ fun ChangeIntakeDialog(
         },
         confirmButton = { TextButton(onClick = onApply) { Text("Apply") } },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },
+    )
+}
+
+// ===== CHANGE-CALENDARS DIALOG ==========================================
+
+@Composable
+fun ChangeCalendarsDialog(
+    calendars: List<DeviceCalendar>,
+    selectedIds: Set<Long>,
+    onToggle: (Long) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Pick calendars") },
+        text = {
+            if (calendars.isEmpty()) {
+                Text(
+                    "No writable calendars found. Add a Google or Outlook account in Android Settings → Accounts.",
+                )
+            } else {
+                androidx.compose.foundation.lazy.LazyColumn(
+                    modifier = Modifier.heightIn(max = 360.dp),
+                ) {
+                    calendars.groupBy { it.accountName }.forEach { (account, list) ->
+                        item(key = "h-$account") {
+                            Spacer(Modifier.height(8.dp))
+                            Text(
+                                account.ifBlank { "Local" },
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                        items(list, key = { "c-${it.id}" }) { cal ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onToggle(cal.id) }
+                                    .padding(vertical = 10.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(12.dp)
+                                        .clip(CircleShape)
+                                        .background(MaterialTheme.colorScheme.primary),
+                                )
+                                Spacer(Modifier.width(10.dp))
+                                Text(
+                                    cal.displayName.ifBlank { "Calendar #${cal.id}" },
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    modifier = Modifier.weight(1f),
+                                )
+                                Checkbox(
+                                    checked = cal.id in selectedIds,
+                                    onCheckedChange = { onToggle(cal.id) },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text("Done") } },
     )
 }
 
