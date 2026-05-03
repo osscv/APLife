@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.background
@@ -153,17 +155,26 @@ private fun AppRoot() {
         snackbarHost = { SnackbarHost(snackbarState) },
         topBar = {
             val showBack = selectedTab == Tab.Lecturers && lecturer.selected != null
-            if (showBack) {
-                CenterAlignedTopAppBar(
-                    title = {
+            CenterAlignedTopAppBar(
+                title = {
+                    if (showBack) {
                         Text(
                             lecturer.selected?.fullName ?: selectedTab.title,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             maxLines = 1,
                         )
-                    },
-                    navigationIcon = {
+                    } else {
+                        androidx.compose.foundation.Image(
+                            painter = androidx.compose.ui.res.painterResource(R.drawable.aplife_logo),
+                            contentDescription = "APLife",
+                            contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+                            modifier = Modifier.height(32.dp),
+                        )
+                    }
+                },
+                navigationIcon = {
+                    if (showBack) {
                         IconButton(onClick = { viewModel.clearSelectedLecturer() }) {
                             androidx.compose.material3.Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
@@ -171,13 +182,23 @@ private fun AppRoot() {
                                 tint = MaterialTheme.colorScheme.onSurface,
                             )
                         }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    ),
-                )
-            }
+                    }
+                },
+                actions = {
+                    if (!showBack) {
+                        Text(
+                            selectedTab.title,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(end = 12.dp),
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                ),
+            )
         },
         bottomBar = {
             NavigationBar(

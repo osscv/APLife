@@ -272,23 +272,12 @@ private fun WelcomeScreen() {
             .padding(horizontal = 24.dp),
     ) {
         Spacer(Modifier.height(48.dp))
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(96.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.surface)
-                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(24.dp)),
-        ) {
-            Icon(
-                Icons.Default.DateRange,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(48.dp),
-            )
-        }
-        Spacer(Modifier.height(20.dp))
-        Text("APLife", style = MaterialTheme.typography.displayLarge)
+        androidx.compose.foundation.Image(
+            painter = androidx.compose.ui.res.painterResource(net.dkly.aplife.R.drawable.aplife_logo),
+            contentDescription = "APLife",
+            contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+            modifier = Modifier.height(96.dp),
+        )
         Spacer(Modifier.height(8.dp))
         Text(
             "Your APU timetable, in your phone calendar.\nAlways up to date.",
