@@ -13,11 +13,49 @@
   <img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square">
 </p>
 
+<p align="center">
+  <a href="https://github.com/osscv/APLife/releases/tag/V1.0"><strong>⬇ Download v1.0</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://www.dkly.net/projects/8"><strong>📖 Project page on dkly.net</strong></a>
+</p>
+
 ---
 
-APLife is an unofficial Android companion for [Asia Pacific University (APU)](https://www.apu.edu.my/) students. It pulls your weekly classes, exams, and APU holidays straight from APU's public endpoints and pushes them into your phone's native calendar — with smart reminders, weekend auto-sync, festive holiday notifications, and an in-app calendar UI that doubles as a personal planner.
+[APLife](https://www.dkly.net/projects/8) is an unofficial Android companion for [Asia Pacific University (APU)](https://www.apu.edu.my/) students. It pulls your weekly classes, exams, and APU holidays straight from APU's API endpoints and pushes them into your phone's native calendar — with smart reminders, weekend auto-sync, festive holiday notifications, and an in-app calendar UI that doubles as a personal planner.
 
-No login. No account. No backend. Everything stays on your device.
+**No login. No account. No backend. Everything stays on your device.**
+
+---
+
+## 📚 Contents
+
+- [Quickstart](#-quickstart-60-seconds)
+- [Features](#-features)
+- [Screenshots](#-screenshots)
+- [Tech stack](#%EF%B8%8F-tech-stack)
+- [Permissions](#-permissions)
+- [Build](#%EF%B8%8F-build)
+- [Project layout](#-project-layout)
+- [Privacy](#%EF%B8%8F-privacy)
+- [FAQ](#-faq)
+- [Roadmap](#%EF%B8%8F-roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Author](#-author)
+
+---
+
+## 🚀 Quickstart (60 seconds)
+
+1. **Install** — download `app-release.apk` from [the v1.0 release](https://github.com/osscv/APLife/releases/tag/V1.0).
+2. **Allow Calendar** when prompted. Notifications and Audio are optional.
+3. **Search your intake** (e.g. `UCDF2509IRS`) — autocompletes from APU's full intake list.
+4. **Tick the groups** you attend (G1, G2, …).
+5. **Pick the calendars** you want events in. Phone, Google and Outlook can all be selected at once.
+6. **Choose a reminder** offset (15 min is the recommended default).
+7. Tap **Finish & sync**. Your timetable lives in your phone calendar from this moment on.
+
+> Re-running this later? Open the app → **Settings → Reset setup**. Or just tweak any field individually from Settings.
 
 ---
 
@@ -212,7 +250,39 @@ app/src/main/java/net/dkly/aplife/
 
 - **Everything is local.** Your intake code, group selection, notes, class overrides, and personal events live in SharedPreferences on your device. Nothing is uploaded.
 - **No analytics, no telemetry, no crash reporting.**
-- Network requests go directly to APU's public endpoints — APLife is a thin client, not a man-in-the-middle.
+- Network requests go directly to APU's API endpoints — APLife is a thin client, not a man-in-the-middle.
+
+---
+
+## ❓ FAQ
+
+**Will it duplicate events if I sync twice?**
+No. Every event APLife writes carries a hidden `[APLife:TYPE:KEY]` marker in its description. On every sync the manager finds the existing event by marker and **updates it in place** — your room, time, and lecturer changes propagate instead of stacking duplicates.
+
+**What if APU hasn't published next week's timetable yet?**
+Days beyond what APU has released show a friendly *"Timetable not published yet"* card. You can still add personal events; the published classes appear when you re-sync after APU publishes.
+
+**Can I sync to Outlook *and* my Google calendar at the same time?**
+Yes. Tick all the calendars you want in onboarding (or via Settings → Calendars). Every event is written to every selected calendar, deduped per calendar.
+
+**Does it work without an internet connection?**
+Reading your loaded schedule, browsing the bundled lecturer directory, and adding personal events / notes work fully offline. Refreshing the timetable, exams, shuttle and department hours needs network.
+
+**Does APLife send my data anywhere?**
+No. Everything stays in SharedPreferences on your device. No analytics, no telemetry, no account.
+
+**How do I uninstall cleanly?**
+Open Settings → **Remove all APLife events** to wipe APLife-tagged events from your calendars, then uninstall the app normally.
+
+---
+
+## 🛣️ Roadmap
+
+- [ ] **Today widget** for the home screen
+- [ ] **iCal `.ics` export** for sharing your schedule outside Android
+- [ ] **Per-module colour theming** — pick a colour per course
+- [ ] **Voice notes** (the `RECORD_AUDIO` permission is already plumbed)
+- [ ] More holiday greetings — open a PR with your favourite!
 
 ---
 
@@ -240,5 +310,8 @@ This project is unofficial. APU and APSpace are trademarks of Asia Pacific Unive
 ## 👤 Author
 
 **Lay Yang (DKLY)** — [www.dkly.net](https://www.dkly.net)
+
+Project page: <https://www.dkly.net/projects/8>
+Latest release: <https://github.com/osscv/APLife/releases/tag/V1.0>
 
 Built for fellow APU students because looking up your timetable shouldn't take three taps and a captcha.
