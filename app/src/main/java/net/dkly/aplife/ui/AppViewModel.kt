@@ -41,6 +41,7 @@ import net.dkly.aplife.notes.NoteRepository
 import net.dkly.aplife.notes.NoteType
 import net.dkly.aplife.sync.AutoSyncWorker
 import net.dkly.aplife.sync.ExamLuckScheduler
+import net.dkly.aplife.sync.HolidayReminderScheduler
 import net.dkly.aplife.sync.SyncNotifier
 import net.dkly.aplife.sync.SyncStats
 import java.time.DayOfWeek
@@ -114,6 +115,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     private val calendarSync = CalendarSyncManager(app)
     private val syncNotifier = SyncNotifier(app)
     private val examLuckScheduler = ExamLuckScheduler(app)
+    private val holidayReminderScheduler = HolidayReminderScheduler(app)
 
     private val _schedule = MutableStateFlow(ScheduleState())
     val schedule: StateFlow<ScheduleState> = _schedule.asStateFlow()
@@ -429,6 +431,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
                 )
                 // (Re)schedule the per-exam "Good luck" notifications.
                 examLuckScheduler.rescheduleAll(s.exams)
+                // (Re)schedule the day-before-holiday reminders.
+                holidayReminderScheduler.rescheduleAll(s.holidays)
             } catch (t: Throwable) {
                 _schedule.update {
                     it.copy(

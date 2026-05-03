@@ -85,6 +85,8 @@ class AutoSyncWorker(
             )
             // (Re)schedule the per-exam "Good luck" notifications.
             ExamLuckScheduler(applicationContext).rescheduleAll(exams)
+            // (Re)schedule the day-before-holiday reminders.
+            HolidayReminderScheduler(applicationContext).rescheduleAll(holidays)
             Result.success()
         } catch (t: Throwable) {
             notifier.notifyFailure(intake, t.message)

@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DateRange
@@ -118,6 +119,7 @@ fun ScheduleTab(
     var weekStart by remember { mutableStateOf(today.with(java.time.DayOfWeek.MONDAY)) }
     var selectedDate by remember { mutableStateOf(today) }
     var viewMode by remember { mutableStateOf(ScheduleViewMode.Day) }
+    var monthAnchor by remember { mutableStateOf(today.withDayOfMonth(1)) }
 
     val zone = ZoneId.systemDefault()
     val weekEnd = weekStart.plusDays(7)
@@ -212,7 +214,35 @@ fun ScheduleTab(
             )
         }
 
-        item { ViewModeToggle(viewMode = viewMode, onChange = { viewMode = it }) }
+        item {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ViewModeToggle(viewMode = viewMode, onChange = { viewMode = it })
+                Spacer(Modifier.weight(1f))
+                val showToday = when (viewMode) {
+                    ScheduleViewMode.Day -> selectedDate != today
+                    ScheduleViewMode.Week -> weekStart != today.with(java.time.DayOfWeek.MONDAY)
+                    ScheduleViewMode.Month -> monthAnchor != today.withDayOfMonth(1)
+                }
+                if (showToday) {
+                    AssistChip(
+                        onClick = {
+                            selectedDate = today
+                            weekStart = today.with(java.time.DayOfWeek.MONDAY)
+                            monthAnchor = today.withDayOfMonth(1)
+                        },
+                        label = { Text("Today") },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Default.DateRange,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp),
+                            )
+                        },
+                        shape = ChipCorner,
+                    )
+                }
+            }
+        }
 
         when (viewMode) {
             ScheduleViewMode.Day -> {
@@ -222,6 +252,10 @@ fun ScheduleTab(
                         selected = selectedDate,
                         today = today,
                         viewMode = viewMode,
+                        classes = state.filteredEntries,
+                        exams = state.exams,
+                        holidays = state.holidays,
+                        personalEvents = personalEvents,
                         onDateSelected = { selectedDate = it },
                         onWeekShift = { offset ->
                             weekStart = weekStart.plusWeeks(offset.toLong())
@@ -361,31 +395,27 @@ fun ScheduleTab(
                 }
             }
             ScheduleViewMode.Month -> {
-                val anchor = weekStart // use as a date inside the month
-                val monthFirst = anchor.withDayOfMonth(1)
                 item {
                     MonthHeader(
-                        anchorMonth = monthFirst,
+                        anchorMonth = monthAnchor,
                         onShiftMonths = { delta ->
-                            val newAnchor = monthFirst.plusMonths(delta.toLong())
-                            weekStart = newAnchor.with(java.time.DayOfWeek.MONDAY)
-                            if (!selectedDate.month.equals(newAnchor.month)) {
-                                selectedDate = newAnchor
-                            }
+                            monthAnchor = monthAnchor.plusMonths(delta.toLong())
                         },
                     )
                 }
                 item {
                     MonthGrid(
-                        anchorMonth = monthFirst,
+                        anchorMonth = monthAnchor,
                         today = today,
                         selected = selectedDate,
                         classes = state.filteredEntries,
                         exams = state.exams,
+                        holidays = state.holidays,
                         personalEvents = personalEvents,
                         onPickDate = {
                             selectedDate = it
                             weekStart = it.with(java.time.DayOfWeek.MONDAY)
+                            monthAnchor = it.withDayOfMonth(1)
                             viewMode = ScheduleViewMode.Day
                         },
                     )
@@ -560,16 +590,29 @@ private fun WeekRangeHeader(weekStart: LocalDate, onShift: (Int) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth(),
     ) {
-        TextButton(onClick = { onShift(-1) }) { Text("‹  Prev week") }
-        Spacer(Modifier.weight(1f))
+        androidx.compose.material3.IconButton(onClick = { onShift(-1) }) {
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Previous week",
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+        }
         Text(
             "${weekStart.format(DAY_DATE_FMT)} – ${weekStart.plusDays(6).format(DAY_DATE_FMT)}",
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurface,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            maxLines = 1,
+            modifier = Modifier.weight(1f),
         )
-        Spacer(Modifier.weight(1f))
-        TextButton(onClick = { onShift(1) }) { Text("Next week  ›") }
+        androidx.compose.material3.IconButton(onClick = { onShift(1) }) {
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = "Next week",
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+        }
     }
 }
 
@@ -599,6 +642,7 @@ private fun MonthGrid(
     selected: LocalDate,
     classes: List<TimetableEntry>,
     exams: List<ExamEntry>,
+    holidays: List<Holiday>,
     personalEvents: List<PersonalEvent>,
     onPickDate: (LocalDate) -> Unit,
 ) {
@@ -619,6 +663,9 @@ private fun MonthGrid(
         exams.mapNotNull {
             runCatching { OffsetDateTime.parse(it.since).atZoneSameInstant(zone).toLocalDate() }.getOrNull()
         }.toSet()
+    }
+    val holidayDates = remember(holidays) {
+        holidays.map { java.time.Instant.ofEpochMilli(it.startEpochMs).atZone(zone).toLocalDate() }.toSet()
     }
     val personalDates = remember(personalEvents) {
         personalEvents.map { java.time.Instant.ofEpochMilli(it.startMs).atZone(zone).toLocalDate() }.toSet()
@@ -649,6 +696,7 @@ private fun MonthGrid(
                     val isToday = date == today
                     val hasClass = date in classDates
                     val hasExam = date in examDates
+                    val hasHoliday = date in holidayDates
                     val hasPersonal = date in personalDates
                     Box(
                         modifier = Modifier
@@ -685,6 +733,7 @@ private fun MonthGrid(
                             ) {
                                 if (hasClass) Dot(MaterialTheme.colorScheme.primary, isSelected)
                                 if (hasExam) Dot(MaterialTheme.colorScheme.tertiary, isSelected)
+                                if (hasHoliday) Dot(net.dkly.aplife.ui.theme.SuccessGreen, isSelected)
                                 if (hasPersonal) Dot(MaterialTheme.colorScheme.secondary, isSelected)
                             }
                         }
@@ -773,9 +822,30 @@ private fun WeekStrip(
     selected: LocalDate,
     today: LocalDate,
     viewMode: ScheduleViewMode,
+    classes: List<TimetableEntry>,
+    exams: List<ExamEntry>,
+    holidays: List<Holiday>,
+    personalEvents: List<PersonalEvent>,
     onDateSelected: (LocalDate) -> Unit,
     onWeekShift: (Int) -> Unit,
 ) {
+    val zone = ZoneId.systemDefault()
+    val classDates = remember(classes) {
+        classes.mapNotNull {
+            runCatching { OffsetDateTime.parse(it.timeFromIso).atZoneSameInstant(zone).toLocalDate() }.getOrNull()
+        }.toSet()
+    }
+    val examDates = remember(exams) {
+        exams.mapNotNull {
+            runCatching { OffsetDateTime.parse(it.since).atZoneSameInstant(zone).toLocalDate() }.getOrNull()
+        }.toSet()
+    }
+    val holidayDates = remember(holidays) {
+        holidays.map { java.time.Instant.ofEpochMilli(it.startEpochMs).atZone(zone).toLocalDate() }.toSet()
+    }
+    val personalDates = remember(personalEvents) {
+        personalEvents.map { java.time.Instant.ofEpochMilli(it.startMs).atZone(zone).toLocalDate() }.toSet()
+    }
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
             TextButton(onClick = { onWeekShift(-1) }) { Text("<") }
@@ -832,6 +902,20 @@ private fun WeekStrip(
                                 else -> MaterialTheme.colorScheme.onSurface
                             },
                         )
+                        // Indicator dots: class / exam / holiday / personal event
+                        val hasClass = date in classDates
+                        val hasExam = date in examDates
+                        val hasHoliday = date in holidayDates
+                        val hasPersonal = date in personalDates
+                        if (hasClass || hasExam || hasHoliday || hasPersonal) {
+                            Spacer(Modifier.height(4.dp))
+                            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                if (hasClass) Dot(MaterialTheme.colorScheme.primary, isSelected)
+                                if (hasExam) Dot(MaterialTheme.colorScheme.tertiary, isSelected)
+                                if (hasHoliday) Dot(net.dkly.aplife.ui.theme.SuccessGreen, isSelected)
+                                if (hasPersonal) Dot(MaterialTheme.colorScheme.secondary, isSelected)
+                            }
+                        }
                     }
                 }
             }
