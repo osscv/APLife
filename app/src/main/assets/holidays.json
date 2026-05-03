@@ -1,0 +1,654 @@
+[
+    {
+        "active": true,
+        "colors": [
+            {
+                "holiday_set_id": 85,
+                "id": 1855,
+                "month": "January",
+                "value": "#3737A5"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1856,
+                "month": "February",
+                "value": "#6138A3"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1857,
+                "month": "March",
+                "value": "#9E3954"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1858,
+                "month": "April",
+                "value": "#206574"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1859,
+                "month": "May",
+                "value": "#249153"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1860,
+                "month": "June",
+                "value": "#91993D"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1861,
+                "month": "July",
+                "value": "#D3BD3C"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1862,
+                "month": "August",
+                "value": "#D1783D"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1863,
+                "month": "September",
+                "value": "#176AAF"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1864,
+                "month": "October",
+                "value": "#E88F70"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1865,
+                "month": "November",
+                "value": "#9391E2"
+            },
+            {
+                "holiday_set_id": 85,
+                "id": 1866,
+                "month": "December",
+                "value": "#A89978"
+            }
+        ],
+        "holidays": [
+            {
+                "holiday_description": "New Year\u2019s Day",
+                "holiday_end_date": "Wed, 01 Jan 2025 00:00:00 GMT",
+                "holiday_name": "New Year\u2019s Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Wed, 01 Jan 2025 00:00:00 GMT",
+                "id": 845
+            },
+            {
+                "holiday_description": "Additional Holiday Chinese New Year Eve",
+                "holiday_end_date": "Tue, 28 Jan 2025 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Chinese New Year Eve",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Mon, 27 Jan 2025 00:00:00 GMT",
+                "id": 846
+            },
+            {
+                "holiday_description": "Chinese New Year",
+                "holiday_end_date": "Thu, 30 Jan 2025 00:00:00 GMT",
+                "holiday_name": "Chinese New Year",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Wed, 29 Jan 2025 00:00:00 GMT",
+                "id": 847
+            },
+            {
+                "holiday_description": "Additional Holiday Chinese New Year",
+                "holiday_end_date": "Fri, 31 Jan 2025 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Chinese New Year",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Fri, 31 Jan 2025 00:00:00 GMT",
+                "id": 848
+            },
+            {
+                "holiday_description": "Scheduled Leave Chinese New Year",
+                "holiday_end_date": "Fri, 31 Jan 2025 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Chinese New Year",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Fri, 31 Jan 2025 00:00:00 GMT",
+                "id": 849
+            },
+            {
+                "holiday_description": "Federal Territory Day",
+                "holiday_end_date": "Sat, 01 Feb 2025 00:00:00 GMT",
+                "holiday_name": "Federal Territory Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sat, 01 Feb 2025 00:00:00 GMT",
+                "id": 850
+            },
+            {
+                "holiday_description": "Thaipusam ",
+                "holiday_end_date": "Tue, 11 Feb 2025 00:00:00 GMT",
+                "holiday_name": "Thaipusam",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Tue, 11 Feb 2025 00:00:00 GMT",
+                "id": 851
+            },
+            {
+                "holiday_description": "Nuzul Al-Quran",
+                "holiday_end_date": "Tue, 18 Mar 2025 00:00:00 GMT",
+                "holiday_name": "Nuzul Al-Quran",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Tue, 18 Mar 2025 00:00:00 GMT",
+                "id": 852
+            },
+            {
+                "holiday_description": "Hari Raya Puasa*",
+                "holiday_end_date": "Tue, 01 Apr 2025 00:00:00 GMT",
+                "holiday_name": "Hari Raya Puasa*",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 31 Mar 2025 00:00:00 GMT",
+                "id": 853
+            },
+            {
+                "holiday_description": "Additional Holiday Hari Raya Puasa",
+                "holiday_end_date": "Fri, 04 Apr 2025 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Hari Raya Puasa",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Wed, 02 Apr 2025 00:00:00 GMT",
+                "id": 854
+            },
+            {
+                "holiday_description": "Scheduled Leave Hari Raya Puasa*",
+                "holiday_end_date": "Wed, 02 Apr 2025 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Hari Raya Puasa*",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Wed, 02 Apr 2025 00:00:00 GMT",
+                "id": 855
+            },
+            {
+                "holiday_description": "Labour Day",
+                "holiday_end_date": "Thu, 01 May 2025 00:00:00 GMT",
+                "holiday_name": "Labour Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Thu, 01 May 2025 00:00:00 GMT",
+                "id": 856
+            },
+            {
+                "holiday_description": "Wesak Day",
+                "holiday_end_date": "Mon, 12 May 2025 00:00:00 GMT",
+                "holiday_name": "Wesak Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 12 May 2025 00:00:00 GMT",
+                "id": 857
+            },
+            {
+                "holiday_description": "Birthday of S.P.B. Yang di-Pertuan Agong\n",
+                "holiday_end_date": "Mon, 02 Jun 2025 00:00:00 GMT",
+                "holiday_name": "Birthday of S.P.B. Yang di-Pertuan Agong",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 02 Jun 2025 00:00:00 GMT",
+                "id": 858
+            },
+            {
+                "holiday_description": "Scheduled Leave Hari Raya Haji*",
+                "holiday_end_date": "Fri, 06 Jun 2025 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Hari Raya Haji*",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Fri, 06 Jun 2025 00:00:00 GMT",
+                "id": 859
+            },
+            {
+                "holiday_description": "Additional Holiday Hari Raya Haji*",
+                "holiday_end_date": "Fri, 06 Jun 2025 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Hari Raya Haji*",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Fri, 06 Jun 2025 00:00:00 GMT",
+                "id": 860
+            },
+            {
+                "holiday_description": "Hari Raya Haji*",
+                "holiday_end_date": "Sat, 07 Jun 2025 00:00:00 GMT",
+                "holiday_name": "Hari Raya Haji*",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sat, 07 Jun 2025 00:00:00 GMT",
+                "id": 861
+            },
+            {
+                "holiday_description": "Awal Muharram (Maal Hijrah)",
+                "holiday_end_date": "Fri, 27 Jun 2025 00:00:00 GMT",
+                "holiday_name": "Awal Muharram (Maal Hijrah)",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Fri, 27 Jun 2025 00:00:00 GMT",
+                "id": 862
+            },
+            {
+                "holiday_description": "National Day",
+                "holiday_end_date": "Sun, 31 Aug 2025 00:00:00 GMT",
+                "holiday_name": "National Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sun, 31 Aug 2025 00:00:00 GMT",
+                "id": 863
+            },
+            {
+                "holiday_description": "National Day in lieu of Sunday",
+                "holiday_end_date": "Mon, 01 Sep 2025 00:00:00 GMT",
+                "holiday_name": "National Day in lieu of Sunday",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 01 Sep 2025 00:00:00 GMT",
+                "id": 864
+            },
+            {
+                "holiday_description": "Prophet Muhammad's Birthday",
+                "holiday_end_date": "Fri, 05 Sep 2025 00:00:00 GMT",
+                "holiday_name": "Prophet Muhammad's Birthday",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Fri, 05 Sep 2025 00:00:00 GMT",
+                "id": 865
+            },
+            {
+                "holiday_description": "Additional Holiday Malaysia Day",
+                "holiday_end_date": "Mon, 15 Sep 2025 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Malaysia Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 15 Sep 2025 00:00:00 GMT",
+                "id": 921
+            },
+            {
+                "holiday_description": "Malaysia Day",
+                "holiday_end_date": "Tue, 16 Sep 2025 00:00:00 GMT",
+                "holiday_name": "Malaysia Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Tue, 16 Sep 2025 00:00:00 GMT",
+                "id": 866
+            },
+            {
+                "holiday_description": "Deepavali*",
+                "holiday_end_date": "Mon, 20 Oct 2025 00:00:00 GMT",
+                "holiday_name": "Deepavali*",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 20 Oct 2025 00:00:00 GMT",
+                "id": 867
+            },
+            {
+                "holiday_description": "Additional Holiday Deepavali*",
+                "holiday_end_date": "Tue, 21 Oct 2025 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Deepavali*",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Tue, 21 Oct 2025 00:00:00 GMT",
+                "id": 868
+            },
+            {
+                "holiday_description": "Scheduled Leave Deepavali*",
+                "holiday_end_date": "Tue, 21 Oct 2025 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Deepavali*",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Tue, 21 Oct 2025 00:00:00 GMT",
+                "id": 869
+            },
+            {
+                "holiday_description": "Year End Break",
+                "holiday_end_date": "Sat, 03 Jan 2026 00:00:00 GMT",
+                "holiday_name": "Year End Break",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Mon, 22 Dec 2025 00:00:00 GMT",
+                "id": 870
+            },
+            {
+                "holiday_description": "Christmas Day",
+                "holiday_end_date": "Thu, 25 Dec 2025 00:00:00 GMT",
+                "holiday_name": "Christmas Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Thu, 25 Dec 2025 00:00:00 GMT",
+                "id": 871
+            },
+            {
+                "holiday_description": "Scheduled Leave Christmas Day",
+                "holiday_end_date": "Fri, 26 Dec 2025 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Christmas Day",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Fri, 26 Dec 2025 00:00:00 GMT",
+                "id": 872
+            }
+        ],
+        "id": 85,
+        "remarks": "2025 Set Holidays",
+        "year": 2025
+    },
+    {
+        "active": true,
+        "colors": [
+            {
+                "holiday_set_id": 86,
+                "id": 1903,
+                "month": "January",
+                "value": "#3737A5"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1904,
+                "month": "February",
+                "value": "#6138A3"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1905,
+                "month": "March",
+                "value": "#9E3954"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1906,
+                "month": "April",
+                "value": "#206574"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1907,
+                "month": "May",
+                "value": "#249153"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1908,
+                "month": "June",
+                "value": "#91993D"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1909,
+                "month": "July",
+                "value": "#D3BD3C"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1910,
+                "month": "August",
+                "value": "#D1783D"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1911,
+                "month": "September",
+                "value": "#176AAF"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1912,
+                "month": "October",
+                "value": "#E88F70"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1913,
+                "month": "November",
+                "value": "#9391E2"
+            },
+            {
+                "holiday_set_id": 86,
+                "id": 1914,
+                "month": "December",
+                "value": "#A89978"
+            }
+        ],
+        "holidays": [
+            {
+                "holiday_description": "New Year\u2019s Day",
+                "holiday_end_date": "Thu, 01 Jan 2026 00:00:00 GMT",
+                "holiday_name": "New Year\u2019s Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Thu, 01 Jan 2026 00:00:00 GMT",
+                "id": 961
+            },
+            {
+                "holiday_description": "Federal Territory Day",
+                "holiday_end_date": "Sun, 01 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Federal Territory Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sun, 01 Feb 2026 00:00:00 GMT",
+                "id": 962
+            },
+            {
+                "holiday_description": "Thaipusam ",
+                "holiday_end_date": "Sun, 01 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Thaipusam",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sun, 01 Feb 2026 00:00:00 GMT",
+                "id": 963
+            },
+            {
+                "holiday_description": "Federal Territory Day in lieu of Sunday",
+                "holiday_end_date": "Mon, 02 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Federal Territory Day in lieu of Sunday",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 02 Feb 2026 00:00:00 GMT",
+                "id": 964
+            },
+            {
+                "holiday_description": "Thaipusam in lieu of Sunday",
+                "holiday_end_date": "Tue, 03 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Thaipusam in lieu of Sunday",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Tue, 03 Feb 2026 00:00:00 GMT",
+                "id": 965
+            },
+            {
+                "holiday_description": "Scheduled Leave Chinese New Year",
+                "holiday_end_date": "Mon, 16 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Chinese New Year",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Mon, 16 Feb 2026 00:00:00 GMT",
+                "id": 966
+            },
+            {
+                "holiday_description": "Additional Holiday Chinese New Year",
+                "holiday_end_date": "Mon, 16 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Chinese New Year",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Mon, 16 Feb 2026 00:00:00 GMT",
+                "id": 967
+            },
+            {
+                "holiday_description": "Chinese New Year",
+                "holiday_end_date": "Wed, 18 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Chinese New Year",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Tue, 17 Feb 2026 00:00:00 GMT",
+                "id": 968
+            },
+            {
+                "holiday_description": "Additional Holiday Chinese New Year",
+                "holiday_end_date": "Fri, 20 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Chinese New Year",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Thu, 19 Feb 2026 00:00:00 GMT",
+                "id": 969
+            },
+            {
+                "holiday_description": "Scheduled Leave Chinese New Year",
+                "holiday_end_date": "Thu, 19 Feb 2026 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Chinese New Year",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Thu, 19 Feb 2026 00:00:00 GMT",
+                "id": 970
+            },
+            {
+                "holiday_description": "Nuzul Al-Quran",
+                "holiday_end_date": "Sat, 07 Mar 2026 00:00:00 GMT",
+                "holiday_name": "Nuzul Al-Quran",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sat, 07 Mar 2026 00:00:00 GMT",
+                "id": 971
+            },
+            {
+                "holiday_description": "Scheduled Leave Hari Raya Puasa*",
+                "holiday_end_date": "Fri, 20 Mar 2026 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Hari Raya Puasa*",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Fri, 20 Mar 2026 00:00:00 GMT",
+                "id": 972
+            },
+            {
+                "holiday_description": "Additional Holiday Hari Raya Puasa",
+                "holiday_end_date": "Fri, 20 Mar 2026 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Hari Raya Puasa",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Fri, 20 Mar 2026 00:00:00 GMT",
+                "id": 973
+            },
+            {
+                "holiday_description": "Hari Raya Puasa*",
+                "holiday_end_date": "Sun, 22 Mar 2026 00:00:00 GMT",
+                "holiday_name": "Hari Raya Puasa*",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sat, 21 Mar 2026 00:00:00 GMT",
+                "id": 974
+            },
+            {
+                "holiday_description": "Hari Raya Puasa* in lieu of Sunday",
+                "holiday_end_date": "Mon, 23 Mar 2026 00:00:00 GMT",
+                "holiday_name": "Hari Raya Puasa* in lieu of Sunday",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 23 Mar 2026 00:00:00 GMT",
+                "id": 975
+            },
+            {
+                "holiday_description": "Scheduled Leave Hari Raya Puasa",
+                "holiday_end_date": "Tue, 24 Mar 2026 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Hari Raya Puasa",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Tue, 24 Mar 2026 00:00:00 GMT",
+                "id": 977
+            },
+            {
+                "holiday_description": "Additional Holiday Hari Raya Puasa",
+                "holiday_end_date": "Tue, 24 Mar 2026 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Hari Raya Puasa",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Tue, 24 Mar 2026 00:00:00 GMT",
+                "id": 976
+            },
+            {
+                "holiday_description": "Labour Day",
+                "holiday_end_date": "Fri, 01 May 2026 00:00:00 GMT",
+                "holiday_name": "Labour Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Fri, 01 May 2026 00:00:00 GMT",
+                "id": 978
+            },
+            {
+                "holiday_description": "Hari Raya Qurban*",
+                "holiday_end_date": "Wed, 27 May 2026 00:00:00 GMT",
+                "holiday_name": "Hari Raya Qurban*",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Wed, 27 May 2026 00:00:00 GMT",
+                "id": 979
+            },
+            {
+                "holiday_description": "Wesak Day",
+                "holiday_end_date": "Sun, 31 May 2026 00:00:00 GMT",
+                "holiday_name": "Wesak Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sun, 31 May 2026 00:00:00 GMT",
+                "id": 980
+            },
+            {
+                "holiday_description": "Birthday of S.P.B. Yang di-Pertuan Agong\n",
+                "holiday_end_date": "Mon, 01 Jun 2026 00:00:00 GMT",
+                "holiday_name": "Birthday of S.P.B. Yang di-Pertuan Agong",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 01 Jun 2026 00:00:00 GMT",
+                "id": 981
+            },
+            {
+                "holiday_description": "Wesak Day in lieu of Sunday",
+                "holiday_end_date": "Tue, 02 Jun 2026 00:00:00 GMT",
+                "holiday_name": "Wesak Day in lieu of Sunday",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Tue, 02 Jun 2026 00:00:00 GMT",
+                "id": 982
+            },
+            {
+                "holiday_description": "Awal Muharram (Maal Hijrah)",
+                "holiday_end_date": "Wed, 17 Jun 2026 00:00:00 GMT",
+                "holiday_name": "Awal Muharram (Maal Hijrah)",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Wed, 17 Jun 2026 00:00:00 GMT",
+                "id": 983
+            },
+            {
+                "holiday_description": "Birthday of Prophet Muhammad  S.A.W (Maulidur Rasul)",
+                "holiday_end_date": "Tue, 25 Aug 2026 00:00:00 GMT",
+                "holiday_name": "Birthday of Prophet Muhammad  S.A.W (Maulidur Rasul)",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Tue, 25 Aug 2026 00:00:00 GMT",
+                "id": 984
+            },
+            {
+                "holiday_description": "National Day",
+                "holiday_end_date": "Mon, 31 Aug 2026 00:00:00 GMT",
+                "holiday_name": "National Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 31 Aug 2026 00:00:00 GMT",
+                "id": 985
+            },
+            {
+                "holiday_description": "Malaysia Day",
+                "holiday_end_date": "Wed, 16 Sep 2026 00:00:00 GMT",
+                "holiday_name": "Malaysia Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Wed, 16 Sep 2026 00:00:00 GMT",
+                "id": 986
+            },
+            {
+                "holiday_description": "Deepavali*",
+                "holiday_end_date": "Sun, 08 Nov 2026 00:00:00 GMT",
+                "holiday_name": "Deepavali*",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Sun, 08 Nov 2026 00:00:00 GMT",
+                "id": 987
+            },
+            {
+                "holiday_description": "Deepavali* in lieu of Sunday",
+                "holiday_end_date": "Mon, 09 Nov 2026 00:00:00 GMT",
+                "holiday_name": "Deepavali* in lieu of Sunday",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Mon, 09 Nov 2026 00:00:00 GMT",
+                "id": 988
+            },
+            {
+                "holiday_description": "Year End Break",
+                "holiday_end_date": "Sat, 02 Jan 2027 00:00:00 GMT",
+                "holiday_name": "Year End Break",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Mon, 21 Dec 2026 00:00:00 GMT",
+                "id": 989
+            },
+            {
+                "holiday_description": "Scheduled Leave Christmas Day",
+                "holiday_end_date": "Thu, 24 Dec 2026 00:00:00 GMT",
+                "holiday_name": "Scheduled Leave Christmas Day",
+                "holiday_people_affected": "staff",
+                "holiday_start_date": "Thu, 24 Dec 2026 00:00:00 GMT",
+                "id": 990
+            },
+            {
+                "holiday_description": "Additional Holiday Christmas Day",
+                "holiday_end_date": "Thu, 24 Dec 2026 00:00:00 GMT",
+                "holiday_name": "Additional Holiday Christmas Day",
+                "holiday_people_affected": "students",
+                "holiday_start_date": "Thu, 24 Dec 2026 00:00:00 GMT",
+                "id": 991
+            },
+            {
+                "holiday_description": "Christmas Day",
+                "holiday_end_date": "Fri, 25 Dec 2026 00:00:00 GMT",
+                "holiday_name": "Christmas Day",
+                "holiday_people_affected": "all",
+                "holiday_start_date": "Fri, 25 Dec 2026 00:00:00 GMT",
+                "id": 992
+            }
+        ],
+        "id": 86,
+        "remarks": "2026 Set Holidays",
+        "year": 2026
+    }
+]
